@@ -63,7 +63,7 @@ const Newsletter = () => {
         </form>
         
         <p className="text-sm mt-4 opacity-80">
-          By subscribing, you'll receive updates about our programs, impact stories, and partnership opportunities.
+          By subscribing, you&apos;ll receive updates about our programs, impact stories, and partnership opportunities.
         </p>
       </div>
     </section>

@@ -41,7 +41,7 @@ const Contact: NextPage = () => {
       <header className="bg-green-700 text-white py-12 text-center mt-10">
         <h1 className="text-4xl font-bold">Contact Sigona Thomas Foundation</h1>
         <p className="mt-4 max-w-2xl mx-auto">
-          We're here to listen, support, and collaborate. Reach out to us through any of the channels below.
+          We&apos;re here to listen, support, and collaborate. Reach out to us through any of the channels below.
         </p>
       </header>
 
