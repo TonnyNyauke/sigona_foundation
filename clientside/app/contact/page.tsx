@@ -6,6 +6,7 @@ import { NextPage } from 'next'
 import { Phone, Mail, MapPin, Facebook } from 'lucide-react'
 import { FaWhatsapp } from 'react-icons/fa'
 import Header from '../Home/Header'
+import Footer from '../Home/Footer'
 
 interface ContactFormData {
   name: string
@@ -171,6 +172,7 @@ const Contact: NextPage = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }

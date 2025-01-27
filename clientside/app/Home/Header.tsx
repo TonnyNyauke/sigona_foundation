@@ -37,7 +37,7 @@ function Header() {
             <Link href="/" className="text-gray-800 hover:text-green-700 py-2 md:py-0">
               Home
             </Link>
-            <Link href="/about" className="text-gray-800 hover:text-green-700 py-2 md:py-0">
+            <Link href="/aboutus" className="text-gray-800 hover:text-green-700 py-2 md:py-0">
               About Us
             </Link>
             <Link href="/programs" className="text-gray-800 hover:text-green-700 py-2 md:py-0">
