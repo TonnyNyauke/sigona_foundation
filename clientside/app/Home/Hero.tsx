@@ -33,7 +33,7 @@ function Hero() {
           {/* Action Buttons */}
           <div className="flex space-x-4">
             <Link 
-              href="/donate" 
+              href="/get-involved" 
               className="bg-yellow-500 text-green-900 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-400 transition"
             >
               Donate Now
