@@ -3,15 +3,12 @@
 import { NextPage } from "next";
 import Header from "../Home/Header";
 import Footer from "../Home/Footer";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Heart, Users, Handshake, ArrowRight } from 'lucide-react';
+import { Users, Handshake} from 'lucide-react';
 import VolunteerSignUp from "../forms/VolunteerSignUp";
 import Donate from "../forms/Donate";
 import PartnerWithUs from "../forms/PartnerWithUs";
 
 const GetInvolved: NextPage = () => {
-  const [activeForm, setActiveForm] = useState<string>('');
 
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen">
@@ -105,13 +102,6 @@ const impactNumbers = [
   { number: "15", label: "Communities Served" },
   { number: "$2.5M", label: "Funds Distributed" },
   { number: "200+", label: "Active Volunteers" },
-];
-
-const impactMetrics = [
-  "$100 provides clean water access for one family for a year",
-  "$500 funds a child's education for six months",
-  "$1,000 helps establish a sustainable micro-business",
-  "$5,000 supports a community garden feeding 50 families"
 ];
 
 const successStories = [

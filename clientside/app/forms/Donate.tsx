@@ -457,12 +457,5 @@ const trustIndicators: TrustIndicator[] = [
   }
 ];
 
-// Optional: Add error types for better error handling
-type DonationError = {
-  code: string;
-  message: string;
-  field?: string;
-};
-
 // Export the component with its props type
 export default DonationFlow;
