@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { 
-  Building2, 
   HandshakeIcon, 
   ArrowRight,
   CheckCircle2,
@@ -207,7 +206,7 @@ const PartnerWithUs = () => {
             <div>
               <h3 className="text-2xl font-bold mb-2">Thank You for Your Interest!</h3>
               <p className="text-gray-600">
-                We'll review your partnership inquiry and get back to you within 2 business days.
+                We&apos;ll review your partnership inquiry and get back to you within 2 business days.
               </p>
             </div>
             <Button 

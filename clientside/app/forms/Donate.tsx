@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  Phone, Building2, CreditCard, Heart, ArrowRight, 
-  CheckCircle2, Calendar, Users, Building, Shield, Receipt
+  Phone, Building2, Heart, ArrowRight, 
+  CheckCircle2, Shield, Receipt
 } from 'lucide-react';
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -224,7 +224,7 @@ const DonationFlow: React.FC<DonationFlowProps> = ({
           <div className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Honoree's Name</Label>
+                <Label>Honoree&apos;s Name</Label>
                 <Input
                   value={honoreeDetails.name}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
@@ -233,7 +233,7 @@ const DonationFlow: React.FC<DonationFlowProps> = ({
                 />
               </div>
               <div className="space-y-2">
-                <Label>Honoree's Email (Optional)</Label>
+                <Label>Honoree&apos;s Email (Optional)</Label>
                 <Input
                   type="email"
                   value={honoreeDetails.email}
@@ -313,7 +313,7 @@ const DonationFlow: React.FC<DonationFlowProps> = ({
               <div className="space-y-4">
                 <Alert>
                   <AlertDescription>
-                    You'll be redirected to your bank's secure payment page
+                    You&apos;ll be redirected to your bank&apos;s secure payment page
                   </AlertDescription>
                 </Alert>
               </div>
@@ -462,20 +462,6 @@ type DonationError = {
   code: string;
   message: string;
   field?: string;
-};
-
-// Optional: Add validation types
-type ValidationResult = {
-  isValid: boolean;
-  errors?: string[];
-};
-
-// Optional: Add API response types
-type DonationResponse = {
-  success: boolean;
-  transactionId?: string;
-  message?: string;
-  error?: DonationError;
 };
 
 // Export the component with its props type

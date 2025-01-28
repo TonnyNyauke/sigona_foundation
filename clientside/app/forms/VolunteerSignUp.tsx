@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { toast } from '@/hooks/use-toast';
 
 const VolunteerSignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -150,7 +151,13 @@ const VolunteerSignUp = () => {
         </Accordion>
 
         <div className="mt-6">
-          <Button className="w-full" size="lg" disabled={loading}>
+          <Button className="w-full" size="lg" disabled={loading} onClick={() => {
+            setLoading(true)
+            toast({
+              title: "Application submitted successfully."
+            })
+            setLoading(false)
+            }}>
             {loading ? "Submitting..." : "Submit Application"}
           </Button>
           <p className="text-sm text-center text-muted-foreground mt-2">
