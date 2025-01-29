@@ -7,7 +7,7 @@ import ArticlesPage from "./ArticlesPage";
 const BlogManagement = () => {
   const [blogs, setBlogs] = useState(mockBlogs);
   const [searchQuery, setSearchQuery] = useState("");
-  const [newBlog, setNewBlog] = useState({ title: "", content: "", publishedAt: "" });
+  //const [newBlog, setNewBlog] = useState({ title: "", content: "", publishedAt: "" });
 
   const handleDelete = (id: string) => {
     const confirmed = confirm("Are you sure you want to delete this blog post?");

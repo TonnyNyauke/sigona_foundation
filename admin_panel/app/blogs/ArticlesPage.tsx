@@ -76,6 +76,8 @@ const customImage = Image.extend({
 //Function to upload images and base64 inputs
 export async function uploadImage(fileOrBase64: File | string): Promise<string> {
 
+  console.log(fileOrBase64)
+
   return ""
 }
 
