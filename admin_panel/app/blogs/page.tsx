@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
+import ArticlesPage from "./ArticlesPage";
 
 const BlogManagement = () => {
   const [blogs, setBlogs] = useState(mockBlogs);
@@ -84,59 +85,7 @@ const BlogManagement = () => {
         </div>
 
         {/* Add New Blog Form */}
-        <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4">Add New Blog Post</h3>
-          <form onSubmit={handleAddBlog} className="space-y-4 bg-white p-6 rounded-lg shadow-lg">
-            <div>
-              <label htmlFor="title" className="block text-gray-700 font-medium mb-2">
-                Blog Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                value={newBlog.title}
-                onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="content" className="block text-gray-700 font-medium mb-2">
-                Blog Content
-              </label>
-              <textarea
-                id="content"
-                value={newBlog.content}
-                onChange={(e) => setNewBlog({ ...newBlog, content: e.target.value })}
-                rows={6}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              ></textarea>
-            </div>
-
-            <div>
-              <label htmlFor="publishedAt" className="block text-gray-700 font-medium mb-2">
-                Published Date
-              </label>
-              <input
-                type="date"
-                id="publishedAt"
-                value={newBlog.publishedAt}
-                onChange={(e) => setNewBlog({ ...newBlog, publishedAt: e.target.value })}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-green-700 text-white py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              Add Blog Post
-            </button>
-          </form>
-        </div>
+        <ArticlesPage />
       </main>
     </div>
   );
