@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '../firebase';
-import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import Link from 'next/link';
 import { 
   AlertCircle, 
@@ -56,7 +55,7 @@ const Dashboard = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  //const [user, setUser] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -131,23 +130,9 @@ const Dashboard = () => {
     }
   ]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        router.push('/');
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
   const handleLogout = async () => {
     const confirmed = window.confirm('Are you sure you want to logout?');
     if (confirmed) {
-      await signOut(auth);
       router.push('/');
     }
   };
@@ -226,7 +211,7 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-4">
+              {/* <div className="flex items-center space-x-4">
                 <span className="text-sm text-gray-600">{user?.email}</span>
                 <button
                   onClick={handleLogout}
@@ -234,7 +219,7 @@ const Dashboard = () => {
                 >
                   Logout
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </header>
