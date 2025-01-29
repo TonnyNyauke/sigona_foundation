@@ -4,8 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import React, { FormEvent, useRef, useState } from 'react';
 import {db} from '../firebase';
-import { addDoc, collection } from 'firebase/firestore';
-import { ref, getDownloadURL, getStorage, uploadBytes } from 'firebase/storage';
 import { useEditor, EditorContent, Editor, FloatingMenu } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
@@ -78,27 +76,29 @@ const customImage = Image.extend({
 
 //Function to upload images and base64 inputs
 export async function uploadImage(fileOrBase64: File | string): Promise<string> {
-  const storage = getStorage();
-  let file: File;
+  // const storage = getStorage();
+  // let file: File;
   
-  if (typeof fileOrBase64 === 'string' && isBase64Image(fileOrBase64)) {
-    file = await base64ToFile(fileOrBase64);
-  } else if (fileOrBase64 instanceof File) {
-    file = fileOrBase64;
-  } else {
-    throw new Error('Invalid input: must be either File or base64 string');
-  }
+  // if (typeof fileOrBase64 === 'string' && isBase64Image(fileOrBase64)) {
+  //   file = await base64ToFile(fileOrBase64);
+  // } else if (fileOrBase64 instanceof File) {
+  //   file = fileOrBase64;
+  // } else {
+  //   throw new Error('Invalid input: must be either File or base64 string');
+  // }
 
-  const storageRef = ref(storage, `articles/${Date.now()}-${file.name}`);
+  // const storageRef = ref(storage, `articles/${Date.now()}-${file.name}`);
   
-  try {
-    const uploadResult = await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(uploadResult.ref);
-    return downloadURL;
-  } catch (error) {
-    console.error(`Error uploading image:`, error);
-    throw error;
-  }
+  // try {
+  //   const uploadResult = await uploadBytes(storageRef, file);
+  //   const downloadURL = await getDownloadURL(uploadResult.ref);
+  //   return downloadURL;
+  // } catch (error) {
+  //   console.error(`Error uploading image:`, error);
+  //   throw error;
+  // }
+
+  return ""
 }
 
 interface ToolbarButtonProps {
@@ -367,8 +367,8 @@ function ArticlesPage() {
         updatedAt: new Date().toISOString(),
       };
   
-      const articlesRef = collection(db, 'articles');
-      const docRef = await addDoc(articlesRef, articleData);
+      // const articlesRef = collection(db, 'articles');
+      // const docRef = await addDoc(articlesRef, articleData);
       
       // Reset form
       setTitle('');
@@ -380,7 +380,7 @@ function ArticlesPage() {
         fileInputRef.current.value = '';
       }
   
-      alert(`Article published successfully! Document ID: ${docRef.id}`);
+      alert(`Article published successfully! Document ID:`);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
