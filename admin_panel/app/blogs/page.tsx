@@ -16,19 +16,19 @@ const BlogManagement = () => {
     }
   };
 
-  const handleAddBlog = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newBlog.title && newBlog.content && newBlog.publishedAt) {
-      const newBlogData = {
-        id: (blogs.length + 1).toString(),
-        ...newBlog,
-      };
-      setBlogs([...blogs, newBlogData]);
-      setNewBlog({ title: "", content: "", publishedAt: "" });
-    } else {
-      alert("Please fill in all fields to add a new blog post.");
-    }
-  };
+  // const handleAddBlog = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (newBlog.title && newBlog.content && newBlog.publishedAt) {
+  //     const newBlogData = {
+  //       id: (blogs.length + 1).toString(),
+  //       ...newBlog,
+  //     };
+  //     setBlogs([...blogs, newBlogData]);
+  //     setNewBlog({ title: "", content: "", publishedAt: "" });
+  //   } else {
+  //     alert("Please fill in all fields to add a new blog post.");
+  //   }
+  // };
 
   const filteredBlogs = blogs.filter((blog) =>
     blog.title.toLowerCase().includes(searchQuery.toLowerCase())

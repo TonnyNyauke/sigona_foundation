@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronDown, ChevronUp, Filter, Mail, Phone, MapPin, Calendar, Clock } from 'lucide-react';
+import { ChevronDown, ChevronUp, Mail, Phone, MapPin, Calendar, Clock } from 'lucide-react';
 
 const VolunteerManagement = () => {
   const [volunteers, setVolunteers] = useState(mockVolunteers);
@@ -21,6 +21,25 @@ const VolunteerManagement = () => {
     setExpandedRows(prev => 
       prev.includes(id) ? prev.filter(rowId => rowId !== id) : [...prev, id]
     );
+  };
+
+  const removeVolunteer = (id: string) => {
+    const confirmed = window.confirm('Are you sure you want to remove this volunteer?');
+    if (confirmed) {
+      setVolunteers(prev => prev.filter(volunteer => volunteer.id !== id));
+    }
+  };
+
+  const updateVolunteerStatus = (id: string, newStatus: 'Active' | 'On Leave' | 'Inactive') => {
+    setVolunteers(prev => prev.map(volunteer => 
+      volunteer.id === id ? { ...volunteer, status: newStatus } : volunteer
+    ));
+  };
+
+  const sendMessage = (volunteerId: string) => {
+    // In a real app, this would open a modal or navigate to a messaging interface
+    console.log(`Sending message to volunteer ${volunteerId}`);
+    alert('Message functionality would be implemented here');
   };
 
   const filteredVolunteers = volunteers.filter(volunteer => {
@@ -121,9 +140,21 @@ const VolunteerManagement = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
-                    {volunteer.status}
-                  </span>
+                  <Select
+                    value={volunteer.status}
+                    onValueChange={(value: 'Active' | 'On Leave' | 'Inactive') => 
+                      updateVolunteerStatus(volunteer.id, value)
+                    }
+                  >
+                    <SelectTrigger className="w-[120px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="On Leave">On Leave</SelectItem>
+                      <SelectItem value="Inactive">Inactive</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {expandedRows.includes(volunteer.id) ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
                   ) : (
@@ -173,10 +204,24 @@ const VolunteerManagement = () => {
                   </div>
 
                   <div className="mt-6 flex gap-3">
-                    <Button variant="outline" className="text-green-700 border-green-700 hover:bg-green-50">
+                    <Button 
+                      variant="outline" 
+                      className="text-green-700 border-green-700 hover:bg-green-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        sendMessage(volunteer.id);
+                      }}
+                    >
                       Send Message
                     </Button>
-                    <Button variant="outline" className="text-red-600 border-red-600 hover:bg-red-50">
+                    <Button 
+                      variant="outline" 
+                      className="text-red-600 border-red-600 hover:bg-red-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeVolunteer(volunteer.id);
+                      }}
+                    >
                       Remove Volunteer
                     </Button>
                   </div>

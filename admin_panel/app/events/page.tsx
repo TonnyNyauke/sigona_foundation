@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Event, EventCategory, EventStatus, EventType } from './types';
+import { Event, EventStatus } from './types';
 import { EventsTable } from './EventsTable';
 import { EventForm } from './EventForm';
 import { EventPreview } from './EventPreview';

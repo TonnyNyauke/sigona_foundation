@@ -19,8 +19,8 @@ const AdminLogin = () => {
     try {
       //await signInWithEmailAndPassword(auth, email, password);
       router.push("/dashboard"); // Redirect to dashboard on success
-    } catch (err: any) {
-      setError(err.message || "Failed to login. Please try again.");
+    } catch (error) {
+      console.log(error)
     } finally {
       setLoading(false);
     }

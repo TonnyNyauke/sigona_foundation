@@ -3,7 +3,6 @@
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import React, { FormEvent, useRef, useState } from 'react';
-import {db} from '../firebase';
 import { useEditor, EditorContent, Editor, FloatingMenu } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
@@ -26,10 +25,10 @@ import { Button } from '@/components/ui/button';
 import { AlertCircle, ImageIcon, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface MenuBarProps {
-  editor: Editor | null;
-  uploadImage: (file: File) => Promise<string | undefined>;
-}
+// interface MenuBarProps {
+//   editor: Editor | null;
+//   uploadImage: (file: File) => Promise<string | undefined>;
+// }
 
 //Helper function to extract image urls from HTML content
 const extractImageUrls = (htmlContent: string) =>   {
@@ -46,12 +45,12 @@ const isBase64Image = (url: string): boolean => {
 }
 
 //Function to convert base64 to file
-const base64ToFile = async (base64String: string): Promise<File> => {
-  const response = await fetch(base64String)
-  const blob = await response.blob();
+// const base64ToFile = async (base64String: string): Promise<File> => {
+//   const response = await fetch(base64String)
+//   const blob = await response.blob();
 
-  return new File([blob], `image-${Date.now()}.png`, {type: blob.type})
-}
+//   return new File([blob], `image-${Date.now()}.png`, {type: blob.type})
+// }
 
 //Custom image extensions with resizing controls
 const customImage = Image.extend({
@@ -76,27 +75,6 @@ const customImage = Image.extend({
 
 //Function to upload images and base64 inputs
 export async function uploadImage(fileOrBase64: File | string): Promise<string> {
-  // const storage = getStorage();
-  // let file: File;
-  
-  // if (typeof fileOrBase64 === 'string' && isBase64Image(fileOrBase64)) {
-  //   file = await base64ToFile(fileOrBase64);
-  // } else if (fileOrBase64 instanceof File) {
-  //   file = fileOrBase64;
-  // } else {
-  //   throw new Error('Invalid input: must be either File or base64 string');
-  // }
-
-  // const storageRef = ref(storage, `articles/${Date.now()}-${file.name}`);
-  
-  // try {
-  //   const uploadResult = await uploadBytes(storageRef, file);
-  //   const downloadURL = await getDownloadURL(uploadResult.ref);
-  //   return downloadURL;
-  // } catch (error) {
-  //   console.error(`Error uploading image:`, error);
-  //   throw error;
-  // }
 
   return ""
 }
@@ -358,18 +336,15 @@ function ArticlesPage() {
         }
       }
   
-      const articleData = {
-        title: title.trim(),
-        description: description.trim(),
-        content: processedContent, // Use the processed content with uploaded image URLs
-        fileUrl,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      // const articleData = {
+      //   title: title.trim(),
+      //   description: description.trim(),
+      //   content: processedContent, // Use the processed content with uploaded image URLs
+      //   fileUrl,
+      //   createdAt: new Date().toISOString(),
+      //   updatedAt: new Date().toISOString(),
+      // };
   
-      // const articlesRef = collection(db, 'articles');
-      // const docRef = await addDoc(articlesRef, articleData);
-      
       // Reset form
       setTitle('');
       setDescription('');

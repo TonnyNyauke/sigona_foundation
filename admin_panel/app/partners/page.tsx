@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronDown, ChevronUp, Mail, Phone, Building2, ClipboardList, AlertCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Mail, Phone, Building2, ClipboardList } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 // Define a type for the possible status values

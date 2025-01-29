@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { auth } from '../firebase';
 import Link from 'next/link';
 import { 
   AlertCircle, 
@@ -55,7 +54,6 @@ const Dashboard = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
-  //const [user, setUser] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -130,10 +128,54 @@ const Dashboard = () => {
     }
   ]);
 
+  // Add useEffect to simulate data fetching and handle loading state
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Update stats with fetched data
+        setStats(prevStats => ({
+          ...prevStats,
+          totalDonations: 150000,
+          blogPosts: 25,
+          volunteerSignups: 48,
+          partnerProposals: 12
+        }));
+
+        // Update recent activities with fetched data
+        setRecentActivities(prevActivities => [
+          ...prevActivities,
+          {
+            id: '3',
+            type: 'donation',
+            title: 'New Donation Received',
+            timestamp: 'Just now',
+            status: 'completed'
+          }
+        ]);
+
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   const handleLogout = async () => {
     const confirmed = window.confirm('Are you sure you want to logout?');
     if (confirmed) {
-      router.push('/');
+      try {
+        // Add your logout logic here
+        await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
+        router.push('/');
+      } catch (error) {
+        console.error('Error during logout:', error);
+      }
     }
   };
 
@@ -211,15 +253,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">{user?.email}</span>
-                <button
-                  onClick={handleLogout}
-                  className="bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-lg hover:bg-gray-50"
-                >
-                  Logout
-                </button>
-              </div> */}
+              <Button
+                onClick={handleLogout}
+                className="bg-white text-gray-700 border border-gray-300 py-2 px-4 rounded-lg hover:bg-gray-50"
+              >
+                Logout
+              </Button>
             </div>
           </div>
         </header>
@@ -240,7 +279,7 @@ const Dashboard = () => {
 
               {/* Primary Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                {/* Blog Posts - Primary Focus */}
+                {/* Blog Posts */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
@@ -261,7 +300,6 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                {/* Rest of the metrics cards remain the same... */}
                 {/* Partners */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -346,4 +384,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard
+export default Dashboard;
