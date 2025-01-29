@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import {auth} from './firebase'
 
 const AdminLogin = () => {
@@ -19,7 +18,7 @@ const AdminLogin = () => {
     setError("");
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      //await signInWithEmailAndPassword(auth, email, password);
       router.push("/dashboard"); // Redirect to dashboard on success
     } catch (err: any) {
       setError(err.message || "Failed to login. Please try again.");
