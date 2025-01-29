@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {auth} from './firebase'
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
