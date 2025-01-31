@@ -4,31 +4,10 @@ import { useState } from 'react';
 import { Event, EventStatus } from './types';
 import { EventsTable } from './EventsTable';
 import { EventForm } from './EventForm';
-import { EventPreview } from './EventPreview';
 
 const EventsManagement = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-
-  const handleAddEvent = (newEvent: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const event: Event = {
-      ...newEvent,
-      id: (events.length + 1).toString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    // pages/EventsManagement.tsx (continued)
-    setEvents([...events, event]);
-  };
-
-  const handleDeleteEvent = (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this event?");
-    if (confirmed) {
-      setEvents(events.filter((event) => event.id !== id));
-    }
-  };
 
   const handleStatusChange = (id: string, status: EventStatus) => {
     setEvents(
@@ -40,16 +19,11 @@ const EventsManagement = () => {
     );
   };
 
-  const handlePreview = (event: Event) => {
-    setSelectedEvent(event);
-    setShowPreview(true);
-  };
-
   const filteredEvents = events.filter((event) => {
     return event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
            event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.location.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.location.country.toLowerCase().includes(searchQuery.toLowerCase());
+           event.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           event.country.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
   return (
@@ -78,28 +52,16 @@ const EventsManagement = () => {
 
           <div className="bg-white rounded-lg shadow">
             <EventsTable
-              events={filteredEvents}
-              onDelete={handleDeleteEvent}
               onStatusChange={handleStatusChange}
-              onPreview={handlePreview}
             />
           </div>
         </div>
 
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-6">Create New Event</h2>
-          <EventForm onSubmit={handleAddEvent} />
+          <EventForm />
         </div>
 
-        {showPreview && selectedEvent && (
-          <EventPreview
-            event={selectedEvent}
-            onClose={() => {
-              setShowPreview(false);
-              setSelectedEvent(null);
-            }}
-          />
-        )}
       </main>
     </div>
   );

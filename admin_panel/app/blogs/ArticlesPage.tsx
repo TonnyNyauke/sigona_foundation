@@ -24,11 +24,12 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, ImageIcon, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { saveArticle } from './utils';
 
-// interface MenuBarProps {
-//   editor: Editor | null;
-//   uploadImage: (file: File) => Promise<string | undefined>;
-// }
+interface MenuBarProps {
+  editor: Editor | null;
+  uploadImage: (file: File) => Promise<string | undefined>;
+}
 
 //Helper function to extract image urls from HTML content
 const extractImageUrls = (htmlContent: string) =>   {
@@ -45,12 +46,12 @@ const isBase64Image = (url: string): boolean => {
 }
 
 //Function to convert base64 to file
-// const base64ToFile = async (base64String: string): Promise<File> => {
-//   const response = await fetch(base64String)
-//   const blob = await response.blob();
+const base64ToFile = async (base64String: string): Promise<File> => {
+  const response = await fetch(base64String)
+  const blob = await response.blob();
 
-//   return new File([blob], `image-${Date.now()}.png`, {type: blob.type})
-// }
+  return new File([blob], `image-${Date.now()}.png`, {type: blob.type})
+}
 
 //Custom image extensions with resizing controls
 const customImage = Image.extend({
@@ -75,8 +76,6 @@ const customImage = Image.extend({
 
 //Function to upload images and base64 inputs
 export async function uploadImage(fileOrBase64: File | string): Promise<string> {
-
-  console.log(fileOrBase64)
 
   return ""
 }
@@ -198,10 +197,13 @@ function ArticlesPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [fileUrl, setFileUrl] = useState('');
+  const [authorName, setAuthorName] = useState('');
+  const [authorBio, setAuthorBio] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [status, setStatus] = useState<'draft' | 'published'>('draft');
   //state to track if the form should actually submit
   const [readyToSubmit, setReadyToSubmit] = useState(false);
 
@@ -297,67 +299,55 @@ function ArticlesPage() {
 
   async function handleFormSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-
-     // Only proceed if the submit button was explicitly clicked
-    if (!readyToSubmit) {
-      return;
-    }
-
-
     setError(null);
     setIsSubmitting(true);
-  
+
     try {
       const editorContent = editor?.getHTML();
-  
-      if (!title.trim()) {
-        throw new Error('Please enter a title');
-      }
-  
-      if (!description.trim()) {
-        throw new Error('Please enter a description');
-      }
-  
-      if (!editorContent || editorContent === '<p></p>') {
-        throw new Error('Please add some content to your article');
-      }
-  
-      if (!fileUrl) {
-        throw new Error('Please upload a featured image');
-      }
-  
-      // Extract all image URLs from the editor content
+
+      // Validation
+      if (!title.trim()) throw new Error('Please enter a title');
+      if (!description.trim()) throw new Error('Please enter a description');
+      if (!editorContent || editorContent === '<p></p>') throw new Error('Please add some content to your article');
+      if (!fileUrl) throw new Error('Please upload a featured image');
+      if (!authorName.trim()) throw new Error('Please enter author name');
+
+      // Extract and upload any base64 images from content
       const imageUrls = extractImageUrls(editorContent);
       let processedContent = editorContent;
-  
-      // Upload any base64 images and replace their URLs in the content
+
       for (const url of imageUrls) {
         if (isBase64Image(url)) {
-          const uploadedUrl = await uploadImage(url);
+          const file = await base64ToFile(url);
+          const uploadedUrl = await uploadImage(file);
           processedContent = processedContent.replace(url, uploadedUrl);
         }
       }
-  
-      // const articleData = {
-      //   title: title.trim(),
-      //   description: description.trim(),
-      //   content: processedContent, // Use the processed content with uploaded image URLs
-      //   fileUrl,
-      //   createdAt: new Date().toISOString(),
-      //   updatedAt: new Date().toISOString(),
-      // };
-  
+
+      const articleData = {
+        title: title.trim(),
+        description: description.trim(),
+        content: processedContent,
+        featured_image_url: fileUrl,
+        status,
+        author_name: authorName.trim(),
+      };
+
+      await saveArticle(articleData);
+
       // Reset form
       setTitle('');
       setDescription('');
       setFileUrl('');
-      setReadyToSubmit(false); // Reset the submit flag
+      setAuthorName('');
+      setAuthorBio('');
+      setStatus('draft');
       editor?.commands.clearContent();
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-  
-      alert(`Article published successfully! Document ID:`);
+
+      alert('Article saved successfully!');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
@@ -500,6 +490,19 @@ function ArticlesPage() {
                     </div>
                   )}
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Author Information
+                </label>
+                <Input
+                  type="text"
+                  placeholder="Author Name"
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  className="mb-4"
+                />
+                
               </div>
 
               <div>

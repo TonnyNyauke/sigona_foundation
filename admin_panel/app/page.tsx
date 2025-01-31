@@ -2,14 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { createClient } from "./utils/supabase/client";
+
+interface LoginProps {
+  email: string;
+  password: string;
+}
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState<LoginProps>({
+    email: '',
+    password: '',
+  });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+
+  const supabase = createClient()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +27,10 @@ const AdminLogin = () => {
     setError("");
 
     try {
-      //await signInWithEmailAndPassword(auth, email, password);
+      const {data: {session}, error} = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      })
       router.push("/dashboard"); // Redirect to dashboard on success
     } catch (error) {
       console.log(error)
@@ -41,8 +54,8 @@ const AdminLogin = () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value })}
               required
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="admin@example.com"
@@ -56,8 +69,8 @@ const AdminLogin = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) => setFormData({...formData,password:e.target.value})}
               required
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your password"

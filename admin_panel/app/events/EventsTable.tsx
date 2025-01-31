@@ -1,18 +1,19 @@
+'use client'
+
 import { format } from 'date-fns';
 import { Event, EventStatus } from './types';
+import { useEffect, useState } from 'react';
+import { createClient } from '../utils/supabase/client';
+import EventPreview from './EventPreview';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { toast } from '@/hooks/use-toast';
 
 interface EventsTableProps {
-  events: Event[];
-  onDelete: (id: string) => void;
   onStatusChange: (id: string, status: EventStatus) => void;
-  onPreview: (event: Event) => void;
 }
 
 export const EventsTable: React.FC<EventsTableProps> = ({
-  events,
-  onDelete,
-  onStatusChange,
-  onPreview,
+  onStatusChange
 }) => {
   const getStatusColor = (status: EventStatus) => {
     switch (status) {
@@ -24,6 +25,81 @@ export const EventsTable: React.FC<EventsTableProps> = ({
         return 'bg-red-100 text-red-800';
     }
   };
+
+  const supabase = createClient();
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState<Event | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('events')
+        .select('*');
+
+      if (error) throw error;
+      setEvents(data || []);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+      setError('Failed to load events');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (event: Event) => {
+    setEventToDelete(event);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!eventToDelete) return;
+
+    try {
+      setIsDeleting(true);
+      const { error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', eventToDelete.id);
+
+      if (error) throw error;
+
+      // Update local state
+      setEvents(events.filter(event => event.id !== eventToDelete.id));
+      toast({
+        title: "Event deleted",
+        description: `"${eventToDelete.name}" has been successfully deleted.`
+      });
+    } catch (err) {
+      console.error('Error deleting event:', err);
+      toast({
+        title: "Error",
+        description: "Failed to delete the event. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+      setEventToDelete(null);
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-4">Loading events...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-4 text-red-600">{error}</div>;
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -43,9 +119,9 @@ export const EventsTable: React.FC<EventsTableProps> = ({
             <tr key={event.id} className="border-b hover:bg-gray-50">
               <td className="py-3 px-4">
                 <div className="flex items-center space-x-3">
-                  {event.featuredImage && (
+                  {event.featured_image_url && (
                     <img
-                      src={event.featuredImage}
+                      src={event.featured_image_url}
                       alt={event.name}
                       className="w-10 h-10 rounded-lg object-cover"
                     />
@@ -65,9 +141,9 @@ export const EventsTable: React.FC<EventsTableProps> = ({
               </td>
               <td className="py-3 px-4">{format(new Date(event.date), "dd MMM yyyy")}</td>
               <td className="py-3 px-4">
-                <div>{event.location.venue}</div>
+                <div>{event.venue}</div>
                 <div className="text-sm text-gray-500">
-                  {event.location.city}, {event.location.country}
+                  {event.city}, {event.country}
                 </div>
               </td>
               <td className="py-3 px-4">
@@ -84,16 +160,17 @@ export const EventsTable: React.FC<EventsTableProps> = ({
               <td className="py-3 px-4">
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => onPreview(event)}
+                    onClick={() => setSelectedEvent(event)}
                     className="bg-blue-600 text-white py-1 px-3 rounded-lg hover:bg-blue-500"
                   >
                     Preview
                   </button>
                   <button
-                    onClick={() => onDelete(event.id)}
-                    className="bg-red-600 text-white py-1 px-3 rounded-lg hover:bg-red-500"
+                    onClick={() => handleDeleteClick(event)}
+                    disabled={isDeleting}
+                    className="bg-red-600 text-white py-1 px-3 rounded-lg hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Delete
+                    {isDeleting ? 'Deleting...' : 'Delete'}
                   </button>
                 </div>
               </td>
@@ -101,6 +178,34 @@ export const EventsTable: React.FC<EventsTableProps> = ({
           ))}
         </tbody>
       </table>
+
+      {selectedEvent && (
+        <EventPreview 
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      )}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Event</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{eventToDelete?.name}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
-};
+}

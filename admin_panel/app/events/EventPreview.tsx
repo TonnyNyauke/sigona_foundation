@@ -8,7 +8,7 @@ interface EventPreviewProps {
 
 export const EventPreview: React.FC<EventPreviewProps> = ({ event, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
@@ -20,40 +20,49 @@ export const EventPreview: React.FC<EventPreviewProps> = ({ event, onClose }) =>
               ✕
             </button>
           </div>
-          
-          {event.featuredImage && (
-            <img
-              src={event.featuredImage}
-              alt={event.name}
-              className="w-full h-64 object-cover rounded-lg mb-4"
-            />
-          )}
-          
-          <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
-          
-          <div className="flex items-center space-x-4 mb-4">
-            <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
-              {event.category}
-            </span>
-            <span className="text-gray-500">
-              {format(new Date(event.date), "EEEE, MMMM do yyyy")}
-            </span>
-          </div>
-          
-          <div className="mb-6">
-            <h3 className="font-medium mb-2">Location</h3>
-            <p>
-              {event.location.venue}<br />
-              {event.location.city}, {event.location.country}
-            </p>
-          </div>
-          
-          <div className="prose max-w-none">
-            <h3 className="font-medium mb-2">About This Event</h3>
-            <p>{event.description}</p>
+
+          <div>
+            {event.featured_image_url && (
+              <img
+                src={event.featured_image_url}
+                alt={event.name}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+            )}
+
+            <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
+
+            <div className="flex items-center space-x-4 mb-4">
+              <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                {event.category}
+              </span>
+              <span className="text-gray-500">
+                {format(new Date(event.date), "EEEE, MMMM do yyyy")}
+              </span>
+            </div>
+
+            <div className="mb-6">
+              <h3 className="font-medium mb-2">Location</h3>
+              <p>
+                {event.venue}<br />
+                {event.city}, {event.country}
+              </p>
+            </div>
+
+            <div className="prose max-w-none">
+              <h3 className="font-medium mb-2">About This Event</h3>
+              <p>{event.description}</p>
+            </div>
+
+            <div className="mt-4 text-sm text-gray-500">
+              <p>Event Type: {event.event_type}</p>
+              <p>Status: {event.status}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default EventPreview;

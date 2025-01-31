@@ -10,15 +10,16 @@ export interface Location {
     name: string;
     description: string;
     date: string;
-    location: Location;
+    featured_image_url?: string;
     category: EventCategory;
     status: EventStatus;
-    eventType: EventType;
-    featuredImage?: string;
-    createdAt: string;
-    updatedAt: string;
+    event_type: EventType;
+    venue: string;
+    city: string;
+    country: string;
   }
   
   export type EventCategory = 'fundraising' | 'community' | 'education' | 'mentorship' | 'other';
   export type EventStatus = 'draft' | 'published' | 'cancelled';
   export type EventType = 'physical' | 'virtual' | 'hybrid';
+  
