@@ -24,7 +24,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, ImageIcon, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { saveArticle } from './utils';
+import { saveArticle, uploadImage } from './utils';
 
 interface MenuBarProps {
   editor: Editor | null;
@@ -42,7 +42,7 @@ const extractImageUrls = (htmlContent: string) =>   {
 
 //Function to check if url is a base64 image
 const isBase64Image = (url: string): boolean => {
-  return url.startsWith('data: image')
+  return url.startsWith('data:image')
 }
 
 //Function to convert base64 to file
@@ -74,11 +74,7 @@ const customImage = Image.extend({
   }
 })
 
-//Function to upload images and base64 inputs
-export async function uploadImage(fileOrBase64: File | string): Promise<string> {
 
-  return ""
-}
 
 interface ToolbarButtonProps {
   onClick: () => void;
@@ -441,10 +437,16 @@ function ArticlesPage() {
                   onDrop={async (e) => {
                     e.preventDefault();
                     setIsDragging(false);
-                    const file = e.dataTransfer.files[0];
-                    if (file && file.type.startsWith('image/*')) {
+                    try {
+                      const file = e.dataTransfer.files[0];
+                      if (!file?.type.startsWith('image/')) {
+                        setError('Please drop an image file');
+                        return;
+                      }
                       const url = await uploadImage(file);
                       if (url) setFileUrl(url);
+                    } catch (error) {
+                      setError(`Error uploading image: ${error}`);
                     }
                   }}
                 >

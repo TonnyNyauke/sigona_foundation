@@ -3,19 +3,60 @@ import { createClient } from '../utils/supabase/client';
 
 const supabase = createClient()
 
-export async function uploadImage(file: File): Promise<string> {
+export async function uploadImage(fileOrBase64: File | string): Promise<string> {
+  try {
+    // Handle base64 string
+    if (typeof fileOrBase64 === 'string' && fileOrBase64.startsWith('data:image')) {
+      // Convert base64 to file
+      const response = await fetch(fileOrBase64);
+      const blob = await response.blob();
+      const file = new File([blob], `image-${Date.now()}.${blob.type.split('/')[1]}`, {
+        type: blob.type,
+      });
+      return await uploadFileToStorage(file);
+    }
+    
+    // Handle regular file upload
+    else if (fileOrBase64 instanceof File) {
+      return await uploadFileToStorage(fileOrBase64);
+    }
+    
+    throw new Error('Invalid input: Must be either a File or base64 image string');
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw new Error('Failed to upload image');
+  }
+}
+
+async function uploadFileToStorage(file: File): Promise<string> {
   const fileExt = file.name.split('.').pop();
   const fileName = `${uuidv4()}.${fileExt}`;
-  const filePath = `article-images/${fileName}`;
+  const filePath = `articles/${fileName}`;
 
-  const { error: uploadError, data } = await supabase.storage
-    .from('articles')
-    .upload(filePath, file);
-
-  if (uploadError) {
-    throw new Error('Error uploading image');
+  // Check file size (limit to 5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error('File size exceeds 5MB limit');
   }
 
+  // Verify file type
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Invalid file type. Only images are allowed.');
+  }
+
+  // Upload to Supabase storage
+  const { error: uploadError, data } = await supabase.storage
+    .from('stf_foundation')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+
+  if (uploadError) {
+    console.error('Storage upload error:', uploadError);
+    throw new Error('Error uploading image to storage');
+  }
+
+  // Get public URL
   const { data: { publicUrl } } = supabase.storage
     .from('articles')
     .getPublicUrl(filePath);

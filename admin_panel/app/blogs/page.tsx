@@ -16,11 +16,6 @@ const BlogManagement = () => {
     }
   };
 
-  const handleAddBlog = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-  };
-
   const filteredBlogs = blogs.filter((blog) =>
     blog.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
