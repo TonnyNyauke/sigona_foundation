@@ -18,8 +18,13 @@ export interface Location {
     city: string;
     country: string;
   }
+  export type PaginationProps = {
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+  };
   
   export type EventCategory = 'fundraising' | 'community' | 'education' | 'mentorship' | 'other';
-  export type EventStatus = 'draft' | 'published' | 'cancelled';
+  export type EventStatus = 'upcoming' | 'past' | 'cancelled';
   export type EventType = 'physical' | 'virtual' | 'hybrid';
   

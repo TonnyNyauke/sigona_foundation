@@ -26,11 +26,6 @@ import { AlertCircle, ImageIcon, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { saveArticle, uploadImage } from './utils';
 
-interface MenuBarProps {
-  editor: Editor | null;
-  uploadImage: (file: File) => Promise<string | undefined>;
-}
-
 //Helper function to extract image urls from HTML content
 const extractImageUrls = (htmlContent: string) =>   {
   const parser = new DOMParser();
