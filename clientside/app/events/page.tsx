@@ -1,69 +1,68 @@
-import { NextPage } from "next";
-import Link from "next/link";
-import Header from "../Home/Header";
+import { Event } from './types';
+import { format } from 'date-fns';
 
-const Events: NextPage = () => {
+interface EventPreviewProps {
+  event: Event;
+  onClose: () => void;
+}
+
+export const EventPreview: React.FC<EventPreviewProps> = ({ event, onClose }) => {
   return (
-    <div className="bg-gray-100 text-gray-800 min-h-screen">
-        <Header />
-      <header className="bg-green-700 text-white py-8 text-center mt-12">
-        <h1 className="text-4xl font-bold">Upcoming Events</h1>
-        <p className="mt-2">
-          Stay updated with the latest events hosted by the Sigona Thomas Foundation.
-        </p>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 py-16">
-        {events.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event) => (
-              <div
-                key={event.title}
-                className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition"
-              >
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-green-700 mb-4">{event.title}</h2>
-                  <p className="text-gray-600 mb-2">
-                    <strong>Date:</strong> {event.date}
-                  </p>
-                  <p className="text-gray-600 mb-4">
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                  <p className="text-gray-600 mb-4">{event.description}</p>
-                  {event.link && (
-                    <Link href={event.link} className="text-green-700 font-semibold hover:underline">
-                      Learn More
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Event Preview</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
           </div>
-        ) : (
-          <p className="text-center text-lg text-gray-600">
-            No upcoming events at the moment. Please check back later.
-          </p>
-        )}
-      </main>
+
+          <div>
+            {event.featured_image_url && (
+              <img
+                src={event.featured_image_url}
+                alt={event.name}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+            )}
+
+            <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
+
+            <div className="flex items-center space-x-4 mb-4">
+              <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                {event.category}
+              </span>
+              <span className="text-gray-500">
+                {format(new Date(event.date), "EEEE, MMMM do yyyy")}
+              </span>
+            </div>
+
+            <div className="mb-6">
+              <h3 className="font-medium mb-2">Location</h3>
+              <p>
+                {event.venue}<br />
+                {event.city}, {event.country}
+              </p>
+            </div>
+
+            <div className="prose max-w-none">
+              <h3 className="font-medium mb-2">About This Event</h3>
+              <p>{event.description}</p>
+            </div>
+
+            <div className="mt-4 text-sm text-gray-500">
+              <p>Event Type: {event.event_type}</p>
+              <p>Status: {event.status}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-const events = [
-  {
-    title: "Community Tree Planting Day",
-    date: "March 15, 2025",
-    location: "Gembe Hills, Homa Bay, Kenya",
-    description: "Join us in planting trees to restore the environment and combat climate change.",
-    link: "/events/community-tree-planting",
-  },
-  {
-    title: "Youth Climate Action Workshop",
-    date: "April 22, 2025",
-    location: "Legacy Building, Homa Bay",
-    description: "Empowering young leaders to take actionable steps against climate change.",
-    link: "/events/youth-climate-action",
-  },
-];
-
-export default Events;
+export default EventPreview;

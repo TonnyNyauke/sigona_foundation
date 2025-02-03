@@ -457,5 +457,4 @@ const trustIndicators: TrustIndicator[] = [
   }
 ];
 
-// Export the component with its props type
 export default DonationFlow;
