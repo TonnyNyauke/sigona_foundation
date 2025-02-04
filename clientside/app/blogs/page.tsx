@@ -12,25 +12,50 @@ const Blog: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [blogs, setBlogs] = useState<Blogs[]>([])
   const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
-      const fetchBlogs = async () => {
-        try {
-          setIsLoading(true);
-          const blogsData = await getBlogs();
-          console.log(blogsData)
-          setBlogs(blogsData);
-        } catch (error) {
-          setError(error instanceof Error ? error.message : 'Failed to fetch events');
-        } finally {
-          setIsLoading(false);
-        }
-      };
-  
-      fetchBlogs();
-    }, []);
+    const fetchBlogs = async () => {
+      try {
+        setIsLoading(true);
+        const blogsData = await getBlogs();
+        setBlogs(blogsData);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Failed to fetch blogs');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-2xl text-green-700">Loading blogs...</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100">
+        <Header />
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="text-xl text-red-600">Error: {error}</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen">
-        <Header />
+      <Header />
       <header className="bg-green-700 text-white py-8 text-center mt-12">
         <h1 className="text-4xl font-bold">Blog & Updates</h1>
         <p className="mt-2">
@@ -55,7 +80,7 @@ const Blog: NextPage = () => {
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-green-700 mb-4">{post.title}</h2>
                 <p className="text-gray-600 mb-4">{post.description}</p>
-                <Link href={`blog/${post.id}`} className="text-green-700 font-semibold hover:underline">
+                <Link href={`blogs/${post.id}`} className="text-green-700 font-semibold hover:underline">
                   Read More
                 </Link>
               </div>

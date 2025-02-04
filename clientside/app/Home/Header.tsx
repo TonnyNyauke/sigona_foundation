@@ -23,7 +23,7 @@ function Header() {
     { href: "/programs", label: "Programs", icon: Users },
     { href: "/events", label: "Events", icon: Calendar },
     { href: "/get-involved", label: "Get Involved", icon: HandHelping },
-    { href: "/blog", label: "Blog", icon: BookOpen },
+    { href: "/blogs", label: "Blogs", icon: BookOpen },
     { href: "/contact", label: "Contact", icon: MessageCircle },
   ];
 
