@@ -191,7 +191,7 @@ export const EventsTable: React.FC<EventsTableProps> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Event</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{eventToDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete &quot;{eventToDelete?.name}&quot;? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

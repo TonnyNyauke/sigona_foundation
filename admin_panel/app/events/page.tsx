@@ -19,12 +19,12 @@ const EventsManagement = () => {
     );
   };
 
-  const filteredEvents = events.filter((event) => {
-    return event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           event.country.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  // const filteredEvents = events.filter((event) => {
+  //   return event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //          event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //          event.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //          event.country.toLowerCase().includes(searchQuery.toLowerCase());
+  // });
 
   return (
     <div className="bg-gray-100 min-h-screen">

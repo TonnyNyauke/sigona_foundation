@@ -189,7 +189,6 @@ function ArticlesPage() {
   const [description, setDescription] = useState('');
   const [fileUrl, setFileUrl] = useState('');
   const [authorName, setAuthorName] = useState('');
-  const [authorBio, setAuthorBio] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -307,7 +306,7 @@ function ArticlesPage() {
       let processedContent = editorContent;
 
       for (const url of imageUrls) {
-        if (isBase64Image(url)) {
+        if (isBase64Image(url) && readyToSubmit) {
           const file = await base64ToFile(url);
           const uploadedUrl = await uploadImage(file);
           processedContent = processedContent.replace(url, uploadedUrl);
@@ -329,7 +328,6 @@ function ArticlesPage() {
       setDescription('');
       setFileUrl('');
       setAuthorName('');
-      setAuthorBio('');
       editor?.commands.clearContent();
       if (fileInputRef.current) {
         fileInputRef.current.value = '';

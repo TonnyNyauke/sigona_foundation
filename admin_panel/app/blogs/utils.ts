@@ -44,7 +44,7 @@ async function uploadFileToStorage(file: File): Promise<string> {
   }
 
   // Upload to Supabase storage
-  const { error: uploadError, data } = await supabase.storage
+  const { error: uploadError } = await supabase.storage
     .from('stf_foundation')
     .upload(filePath, file, {
       cacheControl: '3600',

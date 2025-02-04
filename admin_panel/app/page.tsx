@@ -27,10 +27,13 @@ const AdminLogin = () => {
     setError("");
 
     try {
-      const {data: {session}, error} = await supabase.auth.signInWithPassword({
+      const {error} = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       })
+      if (error) {
+        throw error
+      }
       router.push("/dashboard"); // Redirect to dashboard on success
     } catch (error) {
       console.log(error)
