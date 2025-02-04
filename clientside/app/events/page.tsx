@@ -35,16 +35,14 @@ const EventsDisplay: React.FC = () => {
   if (isLoading || error) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg p-6 shadow-xl">
           {isLoading ? (
             <div className="animate-pulse flex flex-col gap-4">
               <Loader className='text-green-700'/>
-              <div className="text-2xl text-green-700">Loading blogs...</div>
+              <div className="text-2xl text-green-700">Loading events...</div>
             </div>
           ) : (
             <p className="text-red-600 flex items-center gap-2">Error: {error}</p>
           )}
-        </div>
       </div>
     );
   }
