@@ -5,7 +5,7 @@ import { Event } from './types';
 import { format, isPast } from 'date-fns';
 import { getEvents } from './events';
 import Image from 'next/image';
-import { Calendar, MapPin, Users, Leaf, ArrowRight, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, Users, Leaf, ArrowRight, ExternalLink, Loader } from 'lucide-react';
 import { Pagination } from '@/components/ui/pagination';
 import Header from '../Home/Header';
 
@@ -38,8 +38,8 @@ const EventsDisplay: React.FC = () => {
         <div className="bg-white rounded-lg p-6 shadow-xl">
           {isLoading ? (
             <div className="animate-pulse flex flex-col gap-4">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <Loader className='text-green-700'/>
+              <div className="text-2xl text-green-700">Loading blogs...</div>
             </div>
           ) : (
             <p className="text-red-600 flex items-center gap-2">Error: {error}</p>
