@@ -9,7 +9,7 @@ import { Calendar, MapPin, Users, Leaf, ArrowRight, ExternalLink } from 'lucide-
 import { Pagination } from '@/components/ui/pagination';
 import Header from '../Home/Header';
 
-export const EventsDisplay: React.FC = () => {
+const EventsDisplay: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
