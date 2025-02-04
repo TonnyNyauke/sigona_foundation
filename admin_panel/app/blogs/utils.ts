@@ -58,7 +58,7 @@ async function uploadFileToStorage(file: File): Promise<string> {
 
   // Get public URL
   const { data: { publicUrl } } = supabase.storage
-    .from('articles')
+    .from('stf_foundation')
     .getPublicUrl(filePath);
 
   return publicUrl;

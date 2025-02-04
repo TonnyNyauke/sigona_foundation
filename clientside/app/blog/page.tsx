@@ -1,10 +1,33 @@
+'use client'
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "../Home/Header";
 import Footer from "../Home/Footer";
+import { useEffect, useState } from "react";
+import { getBlogs } from "./blogs";
+import { Blogs } from "./types";
 
 const Blog: NextPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [blogs, setBlogs] = useState<Blogs[]>([])
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+      const fetchBlogs = async () => {
+        try {
+          setIsLoading(true);
+          const blogsData = await getBlogs();
+          console.log(blogsData)
+          setBlogs(blogsData);
+        } catch (error) {
+          setError(error instanceof Error ? error.message : 'Failed to fetch events');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      fetchBlogs();
+    }, []);
   return (
     <div className="bg-gray-100 text-gray-800 min-h-screen">
         <Header />
@@ -17,13 +40,13 @@ const Blog: NextPage = () => {
 
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogPosts.map((post) => (
+          {blogs.map((post) => (
             <div
               key={post.title}
               className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition"
             >
               <Image
-                src={post.image}
+                src={post.featured_image_url}
                 alt={post.title}
                 width={400}
                 height={250}
@@ -31,8 +54,8 @@ const Blog: NextPage = () => {
               />
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-green-700 mb-4">{post.title}</h2>
-                <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                <Link href={post.link} className="text-green-700 font-semibold hover:underline">
+                <p className="text-gray-600 mb-4">{post.description}</p>
+                <Link href={`blog/${post.id}`} className="text-green-700 font-semibold hover:underline">
                   Read More
                 </Link>
               </div>
@@ -44,29 +67,5 @@ const Blog: NextPage = () => {
     </div>
   );
 };
-
-const blogPosts = [
-  {
-    title: "Empowering Youth Through Agriculture",
-    excerpt:
-      "Discover how our 4K Club initiative is changing perceptions about farming and inspiring the next generation of agricultural leaders.",
-    image: "/images/agriculture-blog.jpg",
-    link: "/blog/empowering-youth",
-  },
-  {
-    title: "Tree Planting Campaign Success",
-    excerpt:
-      "Learn about our recent tree planting campaign and how it’s contributing to environmental conservation in local communities.",
-    image: "/images/tree-planting-blog.jpg",
-    link: "/blog/tree-planting",
-  },
-  {
-    title: "Climate Action in Rural Kenya",
-    excerpt:
-      "Find out how we’re working with rural communities to mitigate the impacts of climate change through sustainable practices.",
-    image: "/images/climate-action-blog.jpg",
-    link: "/blog/climate-action",
-  },
-];
 
 export default Blog;

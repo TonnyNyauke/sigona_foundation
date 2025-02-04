@@ -8,5 +8,6 @@ export async function getBlogs() {
 
     if (error) throw error
 
+    console.log(data)
     return data
 }
