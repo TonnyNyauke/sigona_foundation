@@ -264,7 +264,7 @@ export default function DonationsManagement() {
                       <div className="text-sm text-gray-500">{donation.method}</div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={donation.isProcessed ? "success" : "warning"}>
+                      <Badge variant={donation.isProcessed ? "default" : "destructive"}>
                         {donation.status}
                       </Badge>
                     </TableCell>
