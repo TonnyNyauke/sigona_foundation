@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 // Reading progress bar component
 interface ReadingProgressProps {
-  target: React.RefObject<HTMLDivElement | null>;  // Updated type to allow null
+  target: React.RefObject<HTMLDivElement | null>;  // Type to allow null as useRef can initially return null
 }
 
 const ReadingProgress: React.FC<ReadingProgressProps> = ({ target }) => {
