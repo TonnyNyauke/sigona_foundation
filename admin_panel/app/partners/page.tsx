@@ -27,15 +27,6 @@ const PartnerManagement = () => {
     );
   };
 
-  const getStatusColor = (status: PartnerStatus) => {
-    const colors = {
-      pending: "bg-yellow-100 text-yellow-700",
-      accepted: "bg-green-100 text-green-700",
-      rejected: "bg-red-100 text-red-700"
-    };
-    return colors[status] || "bg-gray-100 text-gray-700";
-  };
-
   const filteredPartners = partners.filter(partner => {
     const matchesSearch = partner.organization.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filters.type ? partner.organizationType === filters.type : true;
@@ -140,7 +131,7 @@ const PartnerManagement = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <Badge className={getStatusColor(partner.status)}>
+                  <Badge className='bg-green-700'>
                     {partner.status.charAt(0).toUpperCase() + partner.status.slice(1)}
                   </Badge>
                   {expandedRows.includes(partner.id) ? (
