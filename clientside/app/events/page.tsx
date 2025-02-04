@@ -34,7 +34,7 @@ const EventsDisplay: React.FC = () => {
 
   if (isLoading || error) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+      <div className="fixed inset-0 bg-gray-100 flex items-center justify-center p-4 z-50">
           {isLoading ? (
             <div className="animate-pulse flex flex-col gap-4">
               <Loader className='text-green-700'/>
