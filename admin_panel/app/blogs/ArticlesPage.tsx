@@ -194,7 +194,6 @@ function ArticlesPage() {
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [status, setStatus] = useState<'draft' | 'published'>('draft');
   //state to track if the form should actually submit
   const [readyToSubmit, setReadyToSubmit] = useState(false);
 
@@ -320,7 +319,6 @@ function ArticlesPage() {
         description: description.trim(),
         content: processedContent,
         featured_image_url: fileUrl,
-        status,
         author_name: authorName.trim(),
       };
 
@@ -332,7 +330,6 @@ function ArticlesPage() {
       setFileUrl('');
       setAuthorName('');
       setAuthorBio('');
-      setStatus('draft');
       editor?.commands.clearContent();
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -340,6 +337,7 @@ function ArticlesPage() {
 
       alert('Article saved successfully!');
     } catch (error) {
+      console.error(error)
       setError(error instanceof Error ? error.message : 'An unexpected error occurred');
     } finally {
       setIsSubmitting(false);
@@ -391,9 +389,6 @@ function ArticlesPage() {
                 </div>
 
                 <div className="flex justify-end gap-4">
-                  <Button type="button" variant="outline">
-                    Save Draft
-                  </Button>
                   <Button
                     type="submit"
                     disabled={isSubmitting}

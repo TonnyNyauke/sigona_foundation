@@ -69,7 +69,6 @@ export async function saveArticle(articleData: {
   description: string;
   content: string;
   featured_image_url: string;
-  status: 'draft' | 'published';
   author_name: string;
 }) {
   const { error, data } = await supabase
@@ -79,42 +78,8 @@ export async function saveArticle(articleData: {
         description: articleData.description,
         content: articleData.content,
         featured_image_url: articleData.featured_image_url,
-        status: articleData.status,
         author_name: articleData.author_name
     })
-
-  if (error) throw error;
-  return data;
-}
-
-export async function updateArticle(
-  id: string,
-  articleData: Partial<{
-    title: string;
-    description: string;
-    content: string;
-    featured_image_url: string;
-    status: 'draft' | 'published';
-    author_name: string;
-    author_bio?: string;
-  }>
-) {
-  const updates = {
-    ...articleData,
-    published_at: 
-      articleData.status === 'published' 
-        ? new Date().toISOString() 
-        : articleData.status === 'draft' 
-          ? null 
-          : undefined,
-  };
-
-  const { error, data } = await supabase
-    .from('articles')
-    .update(updates)
-    .eq('id', id)
-    .select()
-    .single();
 
   if (error) throw error;
   return data;

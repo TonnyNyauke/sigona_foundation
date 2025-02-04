@@ -131,7 +131,7 @@ const programs = [
 ];
 
 const impactMetrics = [
-  { title: "Trees Planted", value: "50,000+" },
+  { title: "Trees Planted", value: "120K+" },
   { title: "Children Supported", value: "10,000+" },
   { title: "Communities Reached", value: "200+" },
 ];

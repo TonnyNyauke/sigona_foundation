@@ -6,7 +6,6 @@ import { format, isPast } from 'date-fns';
 import { getEvents } from './events';
 import Image from 'next/image';
 import { Calendar, MapPin, Users, Leaf, ArrowRight, ExternalLink } from 'lucide-react';
-import Link from 'next/link';
 import { Pagination } from '@/components/ui/pagination';
 import Header from '../Home/Header';
 
