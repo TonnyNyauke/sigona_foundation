@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import { Card, CardContent} from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -7,9 +9,21 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { toast } from '@/hooks/use-toast';
+import { createVolunteer, FormData } from './volunteer';
 
 const VolunteerSignUp = () => {
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    preferredCounty: '',
+    timeCommitment: '',
+    preferredTime: '',
+    volunteerType: '',
+    skillsExperience: ''
+  });
 
   const counties = [
     "Homa Bay", "Migori", "Kitui", "Kakamega", "Narok", 
@@ -25,6 +39,47 @@ const VolunteerSignUp = () => {
     { id: "other", label: "Other" }
   ];
 
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      // Log the form data to verify it's being captured
+      await createVolunteer(formData)
+      console.log('Form submitted with data:', formData);
+      
+      // Here you would typically send the data to your server
+      toast({
+        title: "Application submitted successfully."
+      });
+
+      // Reset form after successful submission
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        preferredCounty: '',
+        timeCommitment: '',
+        preferredTime: '',
+        volunteerType: '',
+        skillsExperience: ''
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to submit application",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="w-full">
       <CardContent className="pt-6">
@@ -39,22 +94,48 @@ const VolunteerSignUp = () => {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="Enter your first name" required />
+                    <Input 
+                      id="firstName" 
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      placeholder="Enter your first name" 
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Enter your last name" required />
+                    <Input 
+                      id="lastName" 
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      placeholder="Enter your last name" 
+                      required 
+                    />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
-                  <Input id="email" type="email" placeholder="you@example.com" required />
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    placeholder="you@example.com" 
+                    required 
+                  />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" type="tel" placeholder="+254" required />
+                  <Input 
+                    id="phone" 
+                    type="tel" 
+                    value={formData.phoneNumber}
+                    onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                    placeholder="+254" 
+                    required 
+                  />
                 </div>
               </div>
             </AccordionContent>
@@ -69,7 +150,10 @@ const VolunteerSignUp = () => {
               <div className="space-y-4 pt-4">
                 <div className="space-y-2">
                   <Label>Preferred Counties</Label>
-                  <Select>
+                  <Select 
+                    value={formData.preferredCounty}
+                    onValueChange={(value) => handleInputChange('preferredCounty', value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select counties" />
                     </SelectTrigger>
@@ -85,7 +169,10 @@ const VolunteerSignUp = () => {
 
                 <div className="space-y-2">
                   <Label>Time Commitment</Label>
-                  <Select>
+                  <Select
+                    value={formData.timeCommitment}
+                    onValueChange={(value) => handleInputChange('timeCommitment', value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select availability" />
                     </SelectTrigger>
@@ -99,7 +186,10 @@ const VolunteerSignUp = () => {
 
                 <div className="space-y-2">
                   <Label>Preferred Time</Label>
-                  <Select>
+                  <Select
+                    value={formData.preferredTime}
+                    onValueChange={(value) => handleInputChange('preferredTime', value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select time slot" />
                     </SelectTrigger>
@@ -123,7 +213,10 @@ const VolunteerSignUp = () => {
               <div className="space-y-4 pt-4">
                 <div className="space-y-2">
                   <Label>Volunteer Type</Label>
-                  <Select>
+                  <Select
+                    value={formData.volunteerType}
+                    onValueChange={(value) => handleInputChange('volunteerType', value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select volunteer type" />
                     </SelectTrigger>
@@ -141,6 +234,8 @@ const VolunteerSignUp = () => {
                   <Label htmlFor="skills">Skills & Experience</Label>
                   <Textarea 
                     id="skills" 
+                    value={formData.skillsExperience}
+                    onChange={(e) => handleInputChange('skillsExperience', e.target.value)}
                     placeholder="Share your skills and experience..."
                     className="h-24"
                   />
@@ -151,13 +246,12 @@ const VolunteerSignUp = () => {
         </Accordion>
 
         <div className="mt-6">
-          <Button className="w-full" size="lg" disabled={loading} onClick={() => {
-            setLoading(true)
-            toast({
-              title: "Application submitted successfully."
-            })
-            setLoading(false)
-            }}>
+          <Button 
+            className="w-full" 
+            size="lg" 
+            disabled={loading} 
+            onClick={handleSubmit}
+          >
             {loading ? "Submitting..." : "Submit Application"}
           </Button>
           <p className="text-sm text-center text-muted-foreground mt-2">
