@@ -37,7 +37,7 @@ export const EventsTable: React.FC<EventsTableProps> = ({
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [events]);
 
   const fetchEvents = async () => {
     try {

@@ -8,9 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ChevronDown, ChevronUp, Mail, Phone, Building2, ClipboardList } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
-// Define a type for the possible status values
-type PartnerStatus = 'pending' | 'accepted' | 'rejected';
-
 const PartnerManagement = () => {
   const [partners, setPartners] = useState(mockPartners);
   const [searchQuery, setSearchQuery] = useState("");

@@ -1,5 +1,8 @@
 'use client';
 
+
+import Images from 'next/image';
+
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import React, { FormEvent, useRef, useState } from 'react';
@@ -440,7 +443,7 @@ function ArticlesPage() {
                 >
                   {fileUrl ? (
                     <div className="relative">
-                      <img
+                      <Images
                         src={fileUrl}
                         alt="Featured"
                         className="w-full h-48 object-cover rounded"

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Event } from './types';
 import { format } from 'date-fns';
 
@@ -23,7 +24,7 @@ export const EventPreview: React.FC<EventPreviewProps> = ({ event, onClose }) =>
 
           <div>
             {event.featured_image_url && (
-              <img
+              <Image
                 src={event.featured_image_url}
                 alt={event.name}
                 className="w-full h-64 object-cover rounded-lg mb-4"
