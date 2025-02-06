@@ -71,6 +71,7 @@ const VolunteerSignUp = () => {
         skillsExperience: ''
       });
     } catch (error) {
+      console.error(error)
       toast({
         title: "Failed to submit application",
         variant: "destructive"

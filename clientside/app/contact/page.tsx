@@ -27,7 +27,7 @@ const Contact: NextPage = () => {
     await makeContact(data)
     setLoading(false)
     toast({
-      description: 'Message sent successfully.'
+      title: 'Message sent successfully.'
     })
   }
 

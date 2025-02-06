@@ -84,6 +84,7 @@ export async function getVolunteers() {
       success: true
     };
   } catch (error) {
+    console.error(error)
     return {
       error: 'Internal server error',
       success: false
