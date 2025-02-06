@@ -1,43 +1,39 @@
 'use client'
 
-import React, { useState, FormEvent, ChangeEvent } from 'react'
+import React, { useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { NextPage } from 'next'
 import { Phone, Mail, MapPin, Facebook } from 'lucide-react'
 import { FaWhatsapp } from 'react-icons/fa'
 import Header from '../Home/Header'
 import Footer from '../Home/Footer'
+import { makeContact } from './contact'
+import { ContactFormData } from './types'
+import { toast } from '@/hooks/use-toast'
 
-interface ContactFormData {
-  name: string
-  email: string
-  message: string
-}
+// Separate the form data interface from the event handling
 
 const Contact: NextPage = () => {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     message: ''
   })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async (data: ContactFormData) => {
+    setLoading(true)
     // Firebase submission logic will be added here
-    console.log(formData)
+    await makeContact(data)
+    setLoading(false)
+    toast({
+      description: 'Message sent successfully'
+    })
   }
 
   return (
     <div className="bg-gray-50 min-h-screen">
-        <Header />
+      <Header />
       <header className="bg-green-700 text-white py-12 text-center mt-10">
         <h1 className="text-4xl font-bold">Contact Sigona Thomas Foundation</h1>
         <p className="mt-4 max-w-2xl mx-auto">
@@ -49,7 +45,7 @@ const Contact: NextPage = () => {
         {/* Contact Form */}
         <div className="bg-white shadow-xl rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-6 text-green-800">Send Us a Message</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Your Name</label>
               <input
@@ -57,7 +53,7 @@ const Contact: NextPage = () => {
                 id="name"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
                 required
                 className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="Your full name"
@@ -70,7 +66,7 @@ const Contact: NextPage = () => {
                 id="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
                 required
                 className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="you@example.com"
@@ -82,7 +78,7 @@ const Contact: NextPage = () => {
                 id="message"
                 name="message"
                 value={formData.message}
-                onChange={handleChange}
+                onChange={(e) => setFormData({...formData, message: e.target.value})}
                 required
                 rows={5}
                 className="w-full p-3 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500"
@@ -92,8 +88,9 @@ const Contact: NextPage = () => {
             <button
               type="submit"
               className="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-600 transition"
+              onClick={() => handleSubmit(formData)}
             >
-              Send Message
+              {loading ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>
