@@ -25,14 +25,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Partner } from './types';
+import { sendRequest } from './partner';
 
 const PartnerWithUs = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Partner>({
     organizationType: '',
     organizationName: '',
-    industry: '',
     contactPerson: '',
     email: '',
     phone: '',
@@ -40,10 +41,11 @@ const PartnerWithUs = () => {
     message: ''
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (formData: Partner) => {
     setLoading(true);
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await sendRequest(formData)
+    console.log(formData)
     setStep(3);
     setLoading(false);
   };
@@ -100,6 +102,7 @@ const PartnerWithUs = () => {
                     <SelectItem value="ngo">NGO/Non-Profit</SelectItem>
                     <SelectItem value="academic">Academic Institution</SelectItem>
                     <SelectItem value="government">Government Agency</SelectItem>
+                    <SelectItem value="individual">Individual</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -160,6 +163,17 @@ const PartnerWithUs = () => {
             </div>
 
             <div className="space-y-2">
+              <Label>Phone number</Label>
+              <Input 
+                value={formData.phone}
+                onChange={(e) => 
+                  setFormData(prev => ({...prev, phone: e.target.value}))
+                }
+                placeholder="+254 7"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Email Address</Label>
               <Input 
                 type="email"
@@ -189,7 +203,7 @@ const PartnerWithUs = () => {
               </Button>
               <Button 
                 className="flex-1"
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(formData)}
                 disabled={loading || !formData.email || !formData.contactPerson}
               >
                 {loading ? 'Submitting...' : 'Submit Inquiry'}
