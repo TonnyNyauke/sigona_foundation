@@ -1,15 +1,17 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChevronDown, ChevronUp, Mail, Phone, Building2, ClipboardList } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { getPartnershiInterest } from './partners';
+import { Partners } from './types';
 
 const PartnerManagement = () => {
-  const [partners, setPartners] = useState(mockPartners);
+  const [partners, setPartners] = useState<Partners[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState({
     type: "",
@@ -24,14 +26,23 @@ const PartnerManagement = () => {
     );
   };
 
-  const filteredPartners = partners.filter(partner => {
-    const matchesSearch = partner.organization.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = filters.type ? partner.organizationType === filters.type : true;
-    const matchesStatus = filters.status ? partner.status === filters.status : true;
-    const matchesInterest = filters.interest ? partner.interest === filters.interest : true;
+  useEffect(() => {
+    const retrievePartners = async () => {
+      const data = await getPartnershiInterest()
+      setPartners(data)
+    };
+
+    retrievePartners()
+  }, [partners])
+
+  // const filteredPartners = partners.filter(partner => {
+  //   const matchesSearch = partner.organization.toLowerCase().includes(searchQuery.toLowerCase());
+  //   const matchesType = filters.type ? partner.organizationType === filters.type : true;
+  //   const matchesStatus = filters.status ? partner.status === filters.status : true;
+  //   const matchesInterest = filters.interest ? partner.interest === filters.interest : true;
     
-    return matchesSearch && matchesType && matchesStatus && matchesInterest;
-  });
+  //   return matchesSearch && matchesType && matchesStatus && matchesInterest;
+  // });
 
   const handleStatusChange = (id: string, status: string) => {
     setPartners(partners.map(partner => 
@@ -112,7 +123,7 @@ const PartnerManagement = () => {
         </Card>
 
         <div className="space-y-4">
-          {filteredPartners.map((partner) => (
+          {partners.map((partner) => (
             <Card key={partner.id} className="overflow-hidden">
               <div 
                 className="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50"
@@ -123,13 +134,12 @@ const PartnerManagement = () => {
                     <Building2 className="w-5 h-5 text-green-700" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">{partner.organization}</h3>
-                    <p className="text-sm text-gray-600">{partner.organizationType}</p>
+                    <p className="text-sm text-gray-600">{partner.organization_type}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <Badge className='bg-green-700'>
-                    {partner.status.charAt(0).toUpperCase() + partner.status.slice(1)}
+                    {partner.contact_person.charAt(0).toUpperCase() + partner.contact_person.slice(1)}
                   </Badge>
                   {expandedRows.includes(partner.id) ? (
                     <ChevronUp className="w-5 h-5 text-gray-400" />
@@ -163,7 +173,7 @@ const PartnerManagement = () => {
                     <div className="space-y-4">
                       <h4 className="font-semibold">Partnership Details</h4>
                       <div className="space-y-2">
-                        <p className="text-gray-600">{partner.details}</p>
+                        <p className="text-gray-600">{partner.interest}</p>
                         {partner.message && (
                           <div className="mt-4">
                             <h5 className="font-medium mb-2">Additional Message:</h5>
@@ -177,7 +187,7 @@ const PartnerManagement = () => {
                   <div className="mt-6 flex gap-3">
                     <div className="flex-1">
                       <Select 
-                        value={partner.status} 
+                        value={partner.contact_person} 
                         onValueChange={(value) => handleStatusChange(partner.id, value)}
                       >
                         <SelectTrigger>
@@ -207,42 +217,6 @@ const PartnerManagement = () => {
   );
 };
 
-const mockPartners = [
-  {
-    id: "1",
-    organization: "Green Planet Initiative",
-    organizationType: "ngo",
-    contactPerson: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+254 700 123 456",
-    details: "Looking to partner on tree-planting campaigns in Nairobi.",
-    interest: "implementation",
-    message: "We have experience running similar programs in Uganda and Tanzania.",
-    status: "pending",
-  },
-  {
-    id: "2",
-    organization: "EcoFuture Kenya",
-    organizationType: "corporate",
-    contactPerson: "Jane Smith",
-    email: "jane.smith@example.com",
-    phone: "+254 701 987 654",
-    details: "Proposal for collaboration on climate action workshops.",
-    interest: "technical",
-    message: "Our team has developed innovative climate education materials.",
-    status: "accepted",
-  },
-  {
-    id: "3",
-    organization: "AgriYouth Foundation",
-    organizationType: "ngo",
-    contactPerson: "Paul Otieno",
-    email: "paul.otieno@example.com",
-    phone: "+254 702 555 333",
-    details: "Interested in joining efforts for the 4K Club mentorship program.",
-    interest: "implementation",
-    status: "pending",
-  }
-];
+
 
 export default PartnerManagement;
